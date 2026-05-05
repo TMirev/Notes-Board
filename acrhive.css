@@ -1,0 +1,76 @@
+.input-box img,
+.delete-icon,
+.pin-btn,
+.complete-btn,
+.underline-btn {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Make archived notes responsive */
+#archiveContainer .input-box {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    padding: 12px;
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 15px;
+}
+
+/* Prevent inner elements from stretching */
+#archiveContainer .input-box * {
+    max-width: 100%;
+    word-break: break-word;
+}
+
+/* Override index page layout rules */
+#archiveContainer .input-box {
+    display: block !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+}
+
+
+/* FORCE OVERRIDE OF styles.css */
+
+/* Notes */
+body.dark-background .input-box {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+}
+
+/* Archive note wrapper */
+body.dark-background .archive-note {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+}
+
+/* Search bar */
+body.dark-background #searchBar {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+}
+
+/* Top bar */
+body.dark-background .top-bar {
+    background-color: #2a2a2a !important;
+}
+
+/* Popup */
+body.dark-background .popup-box {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+}
+
+/* Buttons */
+body.dark-background .archive-btn,
+body.dark-background .popup-btn {
+    background-color: #444 !important;
+    color: #fff !important;
+}

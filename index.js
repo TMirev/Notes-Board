@@ -1,9 +1,82 @@
 const notesContainer = document.querySelector(".notes-container");
 const createBtn = document.querySelector(".btn");
 const archiveContainer = document.querySelector(".archive-container");
+const templateBtn = document.getElementById("templateBtn");
+const templateMenu = document.getElementById("templateMenu");
+const bgToggle = document.getElementById("bgToggle");
+const appContainer = document.querySelector(".container");
 
-let selectedColor = "#ffffff"; // default note colour
+document.getElementById("openArchive").addEventListener("click", () => {
+    window.location.href = "archive.html";
+});
+
+if (localStorage.getItem("bgMode") === "dark") {
+    appContainer.classList.add("dark-background");
+    bgToggle.textContent = "☀️";
+}
+
+// Toggle background only
+bgToggle.addEventListener("click", () => {
+    appContainer.classList.toggle("dark-background");
+
+    const isDark = appContainer.classList.contains("dark-background");
+    bgToggle.textContent = isDark ? "☀️" : "🌙";
+
+    localStorage.setItem("bgMode", isDark ? "dark" : "light");
+});
+
+
+// Toggle menu on button click
+templateBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    templateMenu.classList.toggle("show");
+    templateMenu.classList.toggle("hidden");
+});
+
+// Close menu when clicking outside
+document.addEventListener("click", () => {
+    templateMenu.classList.add("hidden");
+    templateMenu.classList.remove("show");
+});
+
+// Prevent closing when clicking inside the menu
+templateMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
+
+templateMenu.addEventListener("click", (e) => e.stopPropagation());
+
+templateMenu.addEventListener("click", (e) => {
+    const item = e.target.closest("[data-template]");
+    if (!item) return;
+
+    const templateKey = item.dataset.template;
+    const templateText = templates[templateKey];
+
+    createTemplateNote(templateText);
+
+    templateMenu.classList.remove("show"); // hide menu after choosing
+});
+
+
+
+let selectedColor = "#ffffff";
 let nextOrder = 1;
+
+const templates = {
+
+    shopping: `🛒 Shopping List`,
+
+    study: `📚 Study Notes`,
+
+    work: `💼 Work Tasks`,
+
+    journal: `📝 Daily Journal`,
+
+    sports: ` 🏃 Sports / Activities`,
+};
+
+
 
 document.querySelectorAll(".color-option").forEach(option => {
     option.style.backgroundColor = option.dataset.color;
@@ -35,7 +108,6 @@ function sortNotes() {
     });
     notes.forEach(note => notesContainer.appendChild(note));
 }
-
 
 function ensureNoteOrders() {
     const notes = Array.from(notesContainer.querySelectorAll(".input-box"));
@@ -79,6 +151,7 @@ function createUnderlineButton() {
     return underlineBtn;
 }
 
+
 function toggleUnderlineSelectedWord() {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
@@ -119,6 +192,7 @@ function ensurePinButtons() {
         if (!deleteImg) {
             deleteImg = document.createElement("img");
             deleteImg.src = "images/delete.png";
+            deleteImg.classList.add("delete-icon");
             deleteImg.setAttribute("contenteditable", "false");
             deleteImg.setAttribute("aria-hidden", "true");
             note.appendChild(deleteImg);
@@ -144,15 +218,16 @@ function ensurePinButtons() {
         }
 
         // The delete icon is inside the contenteditable note, so make it non-editable too.
+        deleteImg.classList.add("delete-icon");
         deleteImg.setAttribute("contenteditable", "false");
         deleteImg.setAttribute("aria-hidden", "true");
     });
 }
 
 function isNoteEmpty(note) {
-    // Ignore pin + delete UI; only check the real user text.
     const clone = note.cloneNode(true);
-    clone.querySelectorAll(".pin-btn, .complete-btn, img").forEach(el => el.remove());
+    clone.querySelectorAll(".pin-btn, .complete-btn, .underline-btn, img")
+        .forEach(el => el.remove());
     return clone.textContent.trim().length === 0;
 }
 
@@ -209,6 +284,8 @@ function updateStorage() {
 createBtn.addEventListener("click", () => {
     let inputBox = document.createElement("p");
     inputBox.className = "input-box";
+    inputBox.classList.add("note-fade-in");
+
     inputBox.style.backgroundColor = selectedColor;
     inputBox.setAttribute("contenteditable", "true");
     inputBox.dataset.order = String(nextOrder++);
@@ -230,6 +307,7 @@ createBtn.addEventListener("click", () => {
     inputBox.insertBefore(createUnderlineButton(), img);
 
     notesContainer.appendChild(inputBox);
+    placeCaretAtStart(inputBox);   // ⭐ FIX
     updateStorage();
 });
 
@@ -269,11 +347,71 @@ notesContainer.addEventListener("click", function (e) {
         placeCaretAtStart(clickedNote);
     }
 
-    if (e.target.tagName === "IMG") {
-        e.target.parentElement.remove();
+    if (e.target.classList.contains("delete-icon")) {
+        const note = e.target.closest(".input-box");
+
+        // 1. Load archive array
+        let archive = JSON.parse(localStorage.getItem("archive")) || [];
+
+        // 2. Save the note HTML into archive
+        archive.push(note.outerHTML);
+
+        // 3. Save archive back to localStorage
+        localStorage.setItem("archive", JSON.stringify(archive));
+
+        // 4. Remove note from main board
+        note.remove();
+
+        // 5. Update your existing notes storage
         updateStorage();
+        return;
     }
+
 });
+
+let fontSize = parseInt(localStorage.getItem("fontSize")) || 16;
+
+// Apply saved font size on load
+document.documentElement.style.fontSize = fontSize + "px";
+
+// Increase font size
+document.getElementById("fontIncrease").addEventListener("click", () => {
+    fontSize += 2;
+    document.documentElement.style.fontSize = fontSize + "px";
+    localStorage.setItem("fontSize", fontSize);
+});
+
+// Decrease font size
+document.getElementById("fontDecrease").addEventListener("click", () => {
+    fontSize = Math.max(12, fontSize - 2); // prevent too small
+    document.documentElement.style.fontSize = fontSize + "px";
+    localStorage.setItem("fontSize", fontSize);
+});
+
+
+function createTemplateNote(text) {
+    let inputBox = document.createElement("p");
+    inputBox.className = "input-box";
+    inputBox.style.backgroundColor = selectedColor;
+    inputBox.setAttribute("contenteditable", "true");
+    inputBox.dataset.order = String(nextOrder++);
+
+    inputBox.appendChild(document.createTextNode(text));
+
+    // Add icons
+    let img = document.createElement("img");
+    img.src = "images/delete.png";
+    img.classList.add("delete-icon");
+    img.setAttribute("contenteditable", "false");
+
+    inputBox.appendChild(img);
+    inputBox.insertBefore(createCompleteButton(), img);
+    inputBox.insertBefore(createPinButton(), img);
+    inputBox.insertBefore(createUnderlineButton(), img);
+
+    notesContainer.appendChild(inputBox);
+    updateStorage();
+}
 
 // Persist note edits when the user types.
 notesContainer.addEventListener("input", updateStorage);
@@ -286,18 +424,7 @@ document.addEventListener("keydown", event => {
 
 });
 
-
-
 document.getElementById("searchBar").addEventListener("input", searchNotes);
-
-
-
-
-fetch("/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: "My first SQL note" })
-});
 
 async function loadNotes() {
     const res = await fetch("/api/notes");
@@ -327,6 +454,13 @@ document.getElementById("addBtn").onclick = async () => {
     document.getElementById("noteInput").value = "";
     loadNotes();
 };
+
+window.addEventListener("storage", function (event) {
+    if (event.key === "restoreSignal") {
+        showNotes();   // ✅ reload from localStorage
+    }
+});
+
 
 loadNotes();
 

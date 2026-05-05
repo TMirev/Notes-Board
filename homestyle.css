@@ -1,33 +1,31 @@
 body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
+    min-height: 100vh;
+    /* full phone height */
     display: flex;
     justify-content: center;
+    /* center vertically */
     align-items: center;
-    /* Light blue gradient background */
-    background: linear-gradient(135deg, lightblue);
+    /* center horizontally */
+    background: linear-gradient(135deg, #5f8fb3, #3f6d85);
     font-family: 'Segoe UI', sans-serif;
-
-    border-radius: 20px;
-    overflow: hidden;
 }
 
-
-/* Center content */
+/* Main landing container */
 .landing-container {
-    width: 90%;
-    max-width: 400px;
+    width: 100%;
+    max-width: 450px;
+    /* fits large phones */
+    background: lightgoldenrodyellow;
+    border: 2px solid #f5d142;
+    border-radius: 12px;
+
+    padding: 40px 20px;
     text-align: center;
     color: #003366;
-    /* deep blue text for contrast */
-    padding: 30px;
-    border-radius: 12px;
-    background: lightgoldenrodyellow;
-    border-radius: 5%;
-    margin: 40px auto;
+
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 2px solid #f5d142;
+    margin: 0;
+    /* remove extra spacing */
 }
 
 /* Title */
@@ -48,20 +46,26 @@ body {
     font-size: 18px;
     border: none;
     border-radius: 8px;
-    width: 45%;
-
+    width: 60%;
     background: #b3d9ff;
-    /* soft light blue */
     color: #003366;
     cursor: pointer;
-
-
 }
 
 .landing-container button:hover {
     background: #cce6ff;
-    transform: scale(1.10);
+    transform: scale(1.05);
 }
+
+/* Optional image */
+.home-image {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
 
 .home-image {
     width: 100%;
@@ -82,6 +86,7 @@ body {
         padding: 10px 20px;
     }
 }
+
 
 .hero h1 {
     .hero h1 {
@@ -116,3 +121,4 @@ body {
     transform: translateY(2px);
     box-shadow: 0 2px 0 #003f7d;
 }
+

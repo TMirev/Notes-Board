@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="archive.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Archive</title>
+</head>
+
+<body>
+    <div id="appContainer">
+        <h1>📁 Archives</h1>
+
+        <button class="archive-btn back-btn" onclick="window.location.href='index.html'">
+            ⬅ Back to Notes
+        </button>
+
+        <button id="deleteAllBtn" class="archive-btn delete-all-btn">
+            Delete All
+        </button>
+
+        <div class="top-bar">
+            <input type="text" id="searchBar" placeholder="Search notes....">
+
+        </div>
+
+        <div id="archiveContainer"></div>
+
+        <div id="deletePopup" class="popup-overlay hidden">
+            <div class="popup-box">
+                <p>Are you sure you want to delete all messages permanently?</p>
+                <div class="popup-buttons">
+                    <button id="confirmDelete" class="popup-btn yes-btn">Yes</button>
+                    <button id="cancelDelete" class="popup-btn no-btn">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="archive.js"></script>
+</body>
+
+
+</html>

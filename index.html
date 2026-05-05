@@ -18,37 +18,36 @@
         <div class="top-bar">
             <button class="btn"><img src="images/edit.png">Create Notes</button>
             <input type="text" id="searchBar" placeholder="Search notes....">
-            <select id="tagSelect">
-                <option value="">Personal</option>
-                <option value="">Work</option>
-                <option value="">Home</option>
-                <option value="">Ideas</option>
-                <option value="">School</option>
-            </select>
 
-        </div>
+            <button id="bgToggle" class="bg-toggle">🌙</button>
+            <button id="templateBtn" class="kebab-btn">⋮</button>
 
-        <div class="color-picker">
-            <div class="color-option" data-color="#FAFAFA"></div>
-            <div class="color-option" data-color="#ffeb3b"></div>
-            <div class="color-option" data-color="#ff8a80"></div>
+            <button id="fontIncrease" class="font-btn">A+</button>
+            <button id="fontDecrease" class="font-btn">A-</button>
 
-        </div>
 
-        <div class="notes-container">
-            <p contenteditable="true" class="input-box">
-                <img src="images/delete.png" class="delete-icon">
-            </p>
-
-            <div class="note note-yellow">Important reminder</div>
-
-            <div class="color-options">
-                <span class="dot yellow" onclick="setNoteColor(note, 'note-yellow')"></span>
-                <span class="dot blue" onclick="setNoteColor(note, 'note-blue')"></span>
-                <span class="dot green" onclick="setNoteColor(note, 'note-green')"></span>
-                <span class="dot red" onclick="setNoteColor(note, 'note-red')"></span>
+            <div id="templateMenu" class="template-menu hidden">
+                <div data-template="shopping">🛒 Shopping List</div>
+                <div data-template="study">📚 Study Notes</div>
+                <div data-template="work">💼 Work Tasks</div>
+                <div data-template="journal">📝 Daily Journal</div>
+                <div data-template="sports">🏃 Sports / Activities</div>
             </div>
+
         </div>
+
+        <div class="color-archive-row">
+            <div class="color-picker">
+                <div class="color-option" data-color="#FAFAFA"></div>
+                <div class="color-option" data-color="#ffeb3b"></div>
+                <div class="color-option" data-color="#ff8a80"></div>
+            </div>
+
+            <button id="openArchive" class="archive-btn">📁 Archive</button>
+
+        </div>
+
+        <div class="notes-container"></div>
 
         <script src="index.js"></script>
 
